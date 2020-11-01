@@ -1,12 +1,16 @@
 <template>
     <div v-if="!isEditing">
-        <input v-on:change="$emit('checkbox-changed')" type="checkbox" v-bind:id="id" v-bind:checked="isDone"/>
-        <label v-bind:for="id">{{ title }} {{ transformDate(dueDate) }}</label>
-        <button type="button" v-on:click="toogledToEditForm">Edit</button>
-        <button type="button" v-on:click="deleteToDo">Delete</button>
-        <!-- <img src='@/assets/trash.png' alt='some' width="20" height="20"> -->
+        <span>
+            <input v-on:change="$emit('checkbox-changed')" type="checkbox" v-bind:id="id" v-bind:checked="isDone"/>
+            <label class="main-title" v-bind:for="id">{{ title }}</label>
+        </span>
+        <span class="date">{{ transformDate(dueDate) }}</span>
+        <span>
+            <button type="button" v-on:click="toogledToEditForm">Edit</button>
+            <button type="button" v-on:click="deleteToDo">Delete</button>
+        </span>
     </div>
-    <to-do-edit-form v-else v-on:item-edited="itemEdited" v-bind:id="id" v-bind:title="title"></to-do-edit-form>
+    <to-do-edit-form v-else v-on:edit-cancelled="editCancelled" v-on:item-edited="itemEdited" v-bind:id="id" v-bind:title="title"></to-do-edit-form>
 
 </template>
 
@@ -22,14 +26,13 @@ export default {
     props: {
         id: {required: true},
         title: {required: true, type: String},
-        description: {required: false, type: String},
         dueDate: {required: false, type: String},
         isDone: {required: true, type: Boolean},
     },
 
     methods: {
         transformDate(value) {
-            return moment(String(value)).format('MM/DD/YYYY hh:mm')
+            return moment(String(value)).format('MM/DD/YYYY')
         },
 
         toogledToEditForm() {
@@ -42,6 +45,10 @@ export default {
 
         itemEdited(newTitle) {
             this.$emit('item-is-edited', newTitle);
+            this.isEditing = false;
+        },
+
+        editCancelled() {
             this.isEditing = false;
         }
     },

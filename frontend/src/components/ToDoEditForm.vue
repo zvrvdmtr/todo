@@ -1,9 +1,14 @@
 <template>
     <form v-on:submit.prevent="onSubmit">
         <div>
-            <label>Edit title for {{ title }}</label>
-            <input type="text" autocomplete="off" v-model.trim="newTitle"/>
-            <button type="submit">Save</button>
+            <span>
+                <label>Edit title</label>
+                <input class="main-input" type="text" autocomplete="off" v-model.trim="newTitle"/>
+            </span>
+            <span>
+                <button type="submit">Save</button>
+                <button type="button" v-on:click="onCancel">Cancel</button>
+            </span>
         </div>
     </form>    
 </template>
@@ -26,6 +31,10 @@ export default {
             if (this.newTitle && this.newTitle != this.title) {
                 this.$emit('item-edited', this.newTitle)
             }
+        },
+
+        onCancel() {
+            this.$emit('edit-cancelled')
         }
     }
 }

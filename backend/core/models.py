@@ -5,10 +5,9 @@ from django.db import models
 
 class Task(models.Model):
 
-    name = models.CharField(max_length=128)
-    description = models.TextField(blank=True)
-    due_date = models.DateTimeField(blank=True)
+    title = models.CharField(max_length=128)
+    due_date = models.DateField(blank=True)
     is_done = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ['name', 'due_date']
+        unique_together = ['title', 'due_date']

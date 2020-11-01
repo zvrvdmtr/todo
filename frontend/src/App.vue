@@ -1,10 +1,11 @@
 <template>
   <div>
+    <h1>To-Do List</h1>
     <to-do-form v-on:todo-added="createToDo"></to-do-form>
     <p>{{ listSummary }}</p>
     <ul>
       <li v-for="item in toDoItems" v-bind:key="item.id">
-        <to-do-item v-on:item-deleted="deleteToDo(item.id)" v-on:item-is-edited="itemIsEdited(item.id, $event)" v-on:checkbox-changed="updateDoneStatus(item.id)" v-bind:id="item.id" v-bind:isDone="item.is_done" v-bind:title="item.name" v-bind:dueDate="item.due_date"></to-do-item>
+        <to-do-item v-on:item-deleted="deleteToDo(item.id)" v-on:item-is-edited="itemIsEdited(item.id, $event)" v-on:checkbox-changed="updateDoneStatus(item.id)" v-bind:id="item.id" v-bind:isDone="item.is_done" v-bind:title="item.title" v-bind:dueDate="item.due_date"></to-do-item>
       </li>
     </ul>
   </div> 
@@ -45,13 +46,13 @@ export default {
       this.toDoItems = await dataFromApi.json();
     },
 
-    async createToDo(title, description, date) {
+    async createToDo(title, date) {
       await fetch('http://127.0.0.1:8000/api/tasks/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: title, description: description, due_date: date})
+        body: JSON.stringify({title: title, due_date: date})
       });
       this.getToDo();
     },
@@ -85,7 +86,7 @@ export default {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: newTitle})
+        body: JSON.stringify({title: newTitle})
       });
       this.getToDo();
     }
@@ -106,19 +107,53 @@ export default {
 ul {
      list-style: none;
      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+     border-radius: 5px;
      width: 35%;
      margin-left: auto;
      margin-right: auto;
      padding: 0px;
  }
 
-li {
-  padding: 20px 0px;
+li > div, li > form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
   border-bottom: 1px solid lightgray;
 }
 
-img {
-  vertical-align: middle;
+li > form {
+  justify-content: space-around;
+}
+
+button {
+  cursor: pointer;
+  margin-left: 10px;
+  padding: 5px;
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.main-input {
+  margin-left: 10px;
+  height: 20px;
+  padding: 0;
+}
+
+.date {
+  margin-right: 2%;
+  margin-left: auto;
+}
+
+.main-title {
+  vertical-align: top;
+  display: inline-block;
+  white-space: nowrap;
+  width: 200px;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis; 
 }
 
 </style>
