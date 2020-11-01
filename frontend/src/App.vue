@@ -34,8 +34,12 @@ export default {
 
   computed: {
     listSummary() {
+      const totalLength = this.toDoItems.length
+      if (!totalLength){
+        return `Empty`
+      }
       const doneTasks = this.toDoItems.filter(item => item.is_done);
-      return `${doneTasks.length} out of ${this.toDoItems.length} completed`;
+      return `${doneTasks.length} out of ${totalLength} completed`;
     }
   },
 
@@ -102,6 +106,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+body {
+  background-color: #f5f5f5;
 }
 
 ul {
